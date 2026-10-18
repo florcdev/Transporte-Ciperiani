@@ -1,0 +1,29 @@
+name: Keep Supabase project active
+
+on:
+  schedule:
+    - cron: '15 1,9,17 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Call read-only Supabase function
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -eu
+          : "${SUPABASE_URL:?Set the SUPABASE_URL repository secret}"
+          : "${SUPABASE_ANON_KEY:?Set the SUPABASE_ANON_KEY repository secret}"
+          curl --silent --show-error --fail \
+            --request POST \
+            --header "apikey: ${SUPABASE_ANON_KEY}" \
+            --header "Content-Type: application/json" \
+            --data '{}' \
+            "${SUPABASE_URL%/}/rest/v1/rpc/keep_project_active"
