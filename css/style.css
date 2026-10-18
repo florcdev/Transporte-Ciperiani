@@ -35,6 +35,7 @@
   :root:not([data-theme="light"]) .input::placeholder{
     opacity:1;
   }
+  :root:not([data-theme="light"]) input[type="date"]{color-scheme:dark}
 }
 :root[data-theme="dark"]{
   --maroon:#b43b43; --maroon-deep:#943138;
@@ -50,6 +51,7 @@
   --icon:#a9a39f;
 }
 :root[data-theme="dark"] .input::placeholder{opacity:1}
+:root[data-theme="dark"] input[type="date"]{color-scheme:dark}
 
 /* ============ Base ============ */
 *,*::before,*::after{box-sizing:inherit}
