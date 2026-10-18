@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Camiones · Transporte Ciperiani</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/componentes.css">
+</head>
+<body data-page="camiones">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24"><path d="M14 17V6H2v11h2"/><path d="M14 9h4l4 4v4h-2"/><circle cx="7" cy="17.5" r="2"/><circle cx="17" cy="17.5" r="2"/><path d="M9 17.5h6"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1.5a6.5 6.5 0 0 1 13 0V20z"/><path d="M16 4.8a3.5 3.5 0 0 1 0 6.4M18 14a5.5 5.5 0 0 1 3.5 5.1V20"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5V3h4"/><path d="m16 17 5-5-5-5M21 12H9"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></symbol>
+  <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+</svg>
+
+<main class="auth" id="v-login" hidden>
+  <section class="auth-art" aria-hidden="true">
+    <div class="brand"><small>Transporte</small><strong>Ciperiani</strong></div>
+    <div><h2>Tus viajes, liquidaciones y pagos en un solo lugar.</h2></div>
+    <span></span>
+  </section>
+  <section class="auth-form">
+    <div class="auth-box">
+      <div class="brand brand-m"><small>Transporte</small><strong>Ciperiani</strong></div>
+      <div><h1>Iniciar sesión</h1><p class="sub">Ingresá con tu cuenta para ver tus viajes.</p></div>
+      <form id="loginForm" novalidate>
+        <div class="field"><label for="l-mail">Correo electrónico</label><input class="input" id="l-mail" name="email" type="email" placeholder="nombre@correo.com" autocomplete="email" required></div>
+        <div class="field"><label for="l-pass">Contraseña</label><input class="input" id="l-pass" name="password" type="password" placeholder="Tu contraseña" autocomplete="current-password" required></div>
+        <p class="form-error" id="loginError" role="alert" hidden></p>
+        <button class="btn btn-primary btn-block" type="submit" id="btnLogin">Iniciar sesión</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<div class="app" id="app" hidden>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-head">
+      <button class="menu-btn sidebar-menu-btn" id="sidebarMenuBtn" type="button" aria-label="Contraer menú" aria-controls="sidebar" aria-expanded="true"><svg class="ic"><use href="#i-menu"/></svg></button>
+      <div class="brand"><small>Transporte</small><strong>Ciperiani</strong></div>
+    </div>
+    <nav class="nav" aria-label="Principal">
+      <a href="./index.html#inicio" data-nav="inicio"><svg class="ic"><use href="#i-home"/></svg>Inicio</a>
+      <a href="./viajes.html#viajes" data-nav="viajes"><svg class="ic"><use href="#i-truck"/></svg>Viajes</a>
+      <a href="./reportes.html#reportes" data-nav="reportes"><svg class="ic"><use href="#i-chart"/></svg>Reportes</a>
+      <a href="./choferes.html#choferes" data-nav="choferes"><svg class="ic"><use href="#i-users"/></svg>Choferes</a>
+      <a href="./clientes.html#clientes" data-nav="clientes"><svg class="ic"><use href="#i-users"/></svg>Clientes</a>
+      <a href="./camiones.html#camiones" data-nav="camiones"><svg class="ic"><use href="#i-truck"/></svg>Camiones</a>
+    </nav>
+    <div class="side-f"><a href="#login" id="btnLogout"><svg class="ic"><use href="#i-logout"/></svg>Cerrar sesión</a></div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+  <div class="main">
+    <header class="topbar">
+      <div class="t-left"><button class="menu-btn" id="menuBtn" data-menu-toggle type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg class="ic"><use href="#i-menu"/></svg></button><h1 id="pageTitle">Camiones</h1><div class="crumbs" id="pageCrumbs" hidden><a href="#viajes">Viajes</a><svg class="ic"><use href="#i-chev-r"/></svg><span></span></div></div>
+    </header>
+    <div class="content" id="content">
+      <div class="banner-error" id="appError" role="alert" hidden></div>
+      <section class="page" data-view="camiones" hidden>
+        <section class="card">
+          <div class="card-h driver-card-heading">
+            <div><h2>Camiones</h2><p>Administrá los camiones y sus patentes para asignarlos a los choferes.</p></div>
+            <button class="btn btn-primary" type="button" id="btnNewTruck"><svg class="ic"><use href="#i-plus"/></svg>Agregar camión</button>
+          </div>
+          <div class="table-scroll"><table>
+            <thead><tr><th>Patente</th><th>Marca</th><th>Modelo</th></tr></thead>
+            <tbody id="trucksBody"></tbody>
+          </table></div>
+        </section>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="truckDetailModal" hidden>
+  <div class="modal-scrim" data-close-truck-detail></div>
+  <section class="modal-box card" role="dialog" aria-modal="true" aria-labelledby="truckDetailTitle">
+    <div class="card-h"><h2 id="truckDetailTitle">Información del camión</h2><button class="icon-btn" type="button" data-close-truck-detail aria-label="Cerrar"><svg class="ic"><use href="#i-close"/></svg></button></div>
+    <div class="card-b modal-body">
+      <dl class="catalog-detail-list">
+        <div><dt>Patente</dt><dd id="truckDetailPlate"></dd></div>
+        <div><dt>Marca</dt><dd id="truckDetailMake"></dd></div>
+        <div><dt>Modelo</dt><dd id="truckDetailModel"></dd></div>
+      </dl>
+    </div>
+    <div class="card-f"><button class="btn btn-secondary" type="button" id="btnDeleteTruck">Dar de baja</button><button class="btn btn-primary" type="button" id="btnEditTruck">Editar camión</button></div>
+  </section>
+</div>
+
+<div class="modal" id="truckModal" hidden>
+  <div class="modal-scrim" data-close-truck-modal></div>
+  <form class="modal-box card" id="truckForm" role="dialog" aria-modal="true" aria-labelledby="truckModalTitle" novalidate>
+    <div class="card-h"><h2 id="truckModalTitle">Agregar camión</h2><button class="icon-btn" type="button" data-close-truck-modal aria-label="Cerrar"><svg class="ic"><use href="#i-close"/></svg></button></div>
+    <div class="card-b modal-body">
+      <div class="fields">
+        <div class="field"><label for="truckPlate">Patente</label><input class="input" id="truckPlate" name="patente" maxlength="12" required></div>
+        <div class="field"><label for="truckMake">Marca</label><input class="input" id="truckMake" name="marca" maxlength="80"></div>
+        <div class="field"><label for="truckModel">Modelo</label><input class="input" id="truckModel" name="modelo" maxlength="80"></div>
+      </div>
+    </div>
+    <div class="card-f"><p class="form-error" id="truckFormError" role="alert" hidden></p><button class="btn btn-secondary" type="button" data-close-truck-modal>Cancelar</button><button class="btn btn-primary" type="submit" id="btnSaveTruck">Guardar camión</button></div>
+  </form>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

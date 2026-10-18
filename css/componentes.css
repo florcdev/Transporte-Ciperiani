@@ -1,0 +1,224 @@
+/* =========================================================
+   Componentes agregados. Se carga DESPUÉS de style.css
+   ========================================================= */
+
+/* ---------- Tilde de "pagado" ---------- */
+.chip.has-tick::before{display:none}
+.chip-tick{width:14px;height:14px;stroke-width:2.6}
+
+/* ---------- Tablas de reportes (con scroll horizontal, sin fichas) ---------- */
+.table-scroll{overflow-x:auto}
+.fila-total td{font-weight:700;background:var(--soft)}
+td.empty-cell{padding:32px 18px;text-align:center;color:var(--muted);white-space:normal}
+.catalog-row-link{padding:0;border:0;background:transparent;color:var(--ink);font-weight:600;text-align:left}
+.catalog-row-link:hover{color:var(--maroon);text-decoration:underline}
+tr[data-customer-row],tr[data-driver-row],tr[data-truck-row]{cursor:pointer}
+tr[data-customer-row]:hover td,tr[data-driver-row]:hover td,tr[data-truck-row]:hover td{background:var(--soft)}
+.catalog-detail-list{display:grid;gap:14px}
+.catalog-detail-list>div{display:grid;grid-template-columns:minmax(140px,.7fr) minmax(0,1.3fr);gap:16px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.catalog-detail-list>div:last-child{padding-bottom:0;border-bottom:0}
+.catalog-detail-list dt{color:var(--muted);font-size:13px;font-weight:600}
+.catalog-detail-list dd{font-weight:500;overflow-wrap:anywhere}
+@container (max-width:979px){
+  tbody tr.vacio{display:block}
+}
+
+/* ---------- Avisos y errores ---------- */
+.banner-error{max-width:1280px;margin:0 auto var(--gap);padding:12px 16px;border:1px solid var(--focus);border-radius:var(--r);background:var(--warn-bg);color:var(--ink);font-size:14px}
+.form-error{margin:0;color:var(--focus);font-size:14px}
+.field.has-required-error>label,.field.has-required-error>.lbl{color:var(--focus)}
+.customer-payment-details.has-required-error,.withdrawal-payment-details.has-required-error{outline:1px solid var(--focus);outline-offset:5px;border-radius:var(--r)}
+.trip-truck-plate{pointer-events:none;user-select:none;cursor:not-allowed}
+.input.trip-truck-plate:disabled{background:var(--soft);border-color:var(--line);color:var(--muted);opacity:1}
+.input[aria-invalid="true"],input[aria-invalid="true"],select[aria-invalid="true"],textarea[aria-invalid="true"]{border-color:var(--focus);box-shadow:0 0 0 2px color-mix(in srgb,var(--focus) 18%,transparent)}
+.trip-priority-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:24px}
+.trip-priority-card{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:76px;padding:14px 18px;border:1px solid var(--line-strong);border-left:6px solid var(--wait);border-radius:var(--r);background:var(--wait-bg);color:var(--ink);font-weight:700}
+.trip-priority-card>label,.trip-priority-label{font-size:14px;font-weight:700}
+.trip-priority-card .input{max-width:230px;font-weight:700}
+.trip-status-control.status-wait{border-left-color:var(--wait);background:var(--wait-bg)}
+.trip-status-control.status-process{border-left-color:var(--bar-warn);background:var(--warn-bg)}
+.trip-status-control.status-finished{border-left-color:var(--bar-ok);background:var(--ok-bg)}
+.trip-paid-control{cursor:pointer}
+.trip-paid-control.is-unpaid{border-left-color:var(--wait);background:var(--wait-bg)}
+.trip-paid-control.is-paid{border-left-color:var(--bar-ok);background:var(--ok-bg)}
+.trip-paid-toggle{display:inline-flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid currentColor;border-radius:999px;font-size:13px}
+.trip-paid-toggle input{width:18px;height:18px;margin:0;accent-color:var(--ok)}
+.trip-paid-control.is-unpaid .trip-paid-toggle input{accent-color:var(--wait)}
+.trip-detail-status{height:32px;padding:0 14px;font-size:14px}
+.trip-payment-action{min-height:44px;padding:0 18px;font-weight:700}
+.trip-payment-action.trip-payment-unpaid{border-color:var(--line-strong);background:var(--wait-bg);color:var(--wait)}
+.trip-payment-action.trip-payment-paid{border-color:var(--ok);background:var(--ok-bg);color:var(--ok)}
+.trip-payment-action:disabled:not(.trip-payment-paid){border-color:var(--line-strong);background:var(--wait-bg);color:var(--wait);opacity:.85}
+.form-success{margin:0;color:var(--ok);font-size:14px}
+.password-change-flow{display:grid;gap:16px}
+.password-change-flow>p{margin:0}
+.password-code-countdown{color:var(--muted);font-size:14px}
+.password-code-form{display:flex;flex-wrap:wrap;align-items:end;gap:16px}
+.password-code-form .field{width:min(320px,100%)}
+.new-password-form{display:grid;gap:20px}
+.auth-box .form-error{padding:12px;border:1px solid var(--line);border-radius:var(--r);background:var(--soft)}
+.card-f .form-error{margin-right:auto;text-align:left}
+
+/* ---------- Botón de ícono ---------- */
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid var(--line-strong);border-radius:var(--r);background:var(--surface)}
+.icon-btn:hover{background:var(--soft)}
+
+/* ---------- Modal de viaje ---------- */
+body.modal-open{overflow:hidden}
+.modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px}
+.modal-scrim{position:absolute;inset:0;background:rgba(0,0,0,.5)}
+.modal-box{position:relative;display:flex;flex-direction:column;width:min(760px,100%);max-height:calc(100% - 8px);overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.modal-body{overflow-y:auto}
+select.input{appearance:auto}
+.check-paid{margin-top:20px}
+.form-sum{margin-top:28px;padding:16px 20px;border-radius:var(--r);background:var(--soft);border:1px solid var(--line)}
+.form-sum div:last-child dt,.form-sum div:last-child dd{color:var(--ink);font-weight:700}
+textarea.input{height:auto;min-height:90px;padding:10px 14px;resize:vertical}
+.driver-actions{display:flex;flex-wrap:wrap;gap:10px}
+.table-actions{text-align:right;width:1%;white-space:nowrap}
+.table-actions .driver-actions{justify-content:flex-end;flex-wrap:nowrap;gap:6px}
+.table-actions .icon-btn{width:34px;height:34px}
+.withdrawal-print{display:none}
+.withdrawal-print-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px}
+.withdrawal-print-fields p{margin:0;padding:12px 0;border-bottom:1px solid #ccc}
+.withdrawal-print-full{grid-column:1/-1}
+.expense-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.trip-expenses{display:grid;gap:12px}
+.trip-expense{display:grid;grid-template-columns:minmax(150px,1fr) minmax(100px,.5fr) minmax(120px,.6fr) minmax(140px,.7fr) 40px;align-items:end;gap:12px;padding:12px;border:1px solid var(--line);border-radius:var(--r)}
+.expense-remove{margin-bottom:2px}
+.detail-expenses{display:grid;gap:8px;padding-left:20px}
+.detail-expenses li{padding-left:2px}
+.detail-expenses li:not(:only-child){display:flex;justify-content:space-between;gap:16px}
+.payment-print{display:none}
+.payment-print-number{display:grid;justify-items:end;line-height:1.5}
+.payment-print>h2{margin-top:34px;font-size:15pt}
+.payment-provider{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:12px 0 24px}
+.payment-concept{margin-bottom:22px}
+.payment-print>h3{margin-bottom:8px;font-size:13pt}
+.payment-detail{width:100%;margin-top:8px;table-layout:fixed}
+.payment-detail th,.payment-detail td{width:20%;padding:9px 8px;white-space:normal;overflow-wrap:anywhere}
+.payment-detail .payment-amount{text-align:right}
+.payment-detail tfoot td,.payment-detail tfoot th{border-top:2px solid #222;font-weight:700;text-align:right}
+.payment-add-detail{margin-top:12px}
+.customer-payment-details{display:grid;gap:12px}
+.customer-payment-detail{display:grid;grid-template-columns:repeat(5,minmax(100px,1fr)) 40px;align-items:end;gap:10px;padding:12px;border:1px solid var(--line);border-radius:var(--r)}
+.withdrawal-payment-form{margin-top:24px}
+.withdrawal-payment-details{display:grid;gap:12px}
+.withdrawal-payment-detail{display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) 40px;align-items:end;gap:10px;padding:12px;border:1px solid var(--line);border-radius:var(--r)}
+.withdrawal-payment-detail.has-expense{grid-template-columns:repeat(5,minmax(0,1fr))}
+.withdrawal-payment-detail.has-expense .field:nth-child(5){grid-column:1;grid-row:2}
+.withdrawal-payment-detail.has-expense .field:nth-child(6){grid-column:2;grid-row:2}
+.withdrawal-payment-detail.has-expense .field:nth-child(7){grid-column:3/span 2;grid-row:2}
+.withdrawal-payment-detail.has-expense .withdrawal-payment-remove{grid-column:5;grid-row:2}
+.withdrawal-payment-check-number-field[hidden]{display:none}
+.field-help{display:block;margin-top:5px;color:var(--muted);font-size:12px;line-height:1.4}
+.withdrawal-payment-print{margin-top:24px}
+.withdrawal-payment-print h2{margin-bottom:10px;font-size:15pt}
+.payment-withdrawn{display:flex;align-items:end;gap:12px;margin-top:38px}
+.payment-withdrawn-line{display:inline-block;flex:1;max-width:65%;min-height:28px;border-bottom:1px solid #222}
+.payment-signatures{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:68px;text-align:center}
+.payment-signatures span{border-top:1px solid #222;padding-top:8px}
+
+@media (max-width:720px){
+  .modal{padding:0;place-items:end stretch}
+  .modal-box{width:100%;max-height:92%;border-radius:var(--r) var(--r) 0 0}
+  .card-f{flex-wrap:wrap}
+  .card-f .btn{flex:1}
+  .driver-card-heading{align-items:flex-start;flex-direction:column}
+  .expense-heading{align-items:flex-start}
+  .trip-expense{grid-template-columns:1fr 1fr 40px}
+  .trip-expense .field:first-child,.trip-expense .expense-customer-field{grid-column:1/-1}
+  .payment-provider{flex-direction:column}
+  .payment-signatures{gap:12px;font-size:12px}
+  .customer-payment-detail{grid-template-columns:1fr 1fr 40px}
+  .customer-payment-detail .field:first-child,.customer-payment-detail .field:nth-child(4),.customer-payment-detail .field:nth-child(5){grid-column:1/-1}
+  .withdrawal-payment-detail{grid-template-columns:repeat(2,minmax(0,1fr)) 40px}
+  .withdrawal-payment-detail .field:first-child,.withdrawal-payment-detail .withdrawal-expense-field,.withdrawal-payment-detail .field:nth-child(5),.withdrawal-payment-detail .field:nth-child(6),.withdrawal-payment-detail .field:nth-child(7){grid-column:1/-1}
+  .withdrawal-payment-detail.has-expense{grid-template-columns:repeat(2,minmax(0,1fr)) 40px}
+  .withdrawal-payment-detail.has-expense .field:nth-child(5){grid-column:1;grid-row:auto}
+  .withdrawal-payment-detail.has-expense .field:nth-child(6){grid-column:2;grid-row:auto}
+  .withdrawal-payment-detail.has-expense .field:nth-child(7){grid-column:1/span 2;grid-row:auto}
+  .withdrawal-payment-detail.has-expense .withdrawal-payment-remove{grid-column:3;grid-row:auto}
+  .trip-priority-controls{grid-template-columns:1fr}
+  .trip-priority-card{min-height:68px}
+}
+
+/* ---------- Impresión del resumen de cuenta ---------- */
+@media print{
+  @page{margin:18mm}
+  @page report-statement{size:A4 portrait;margin:12mm}
+  html,body{height:auto;background:#fff}
+  body *{visibility:hidden !important}
+  #printOrder,#printOrder *{visibility:visible !important}
+  #printCustomerOrder,#printCustomerOrder *{visibility:visible !important}
+  body.printing-report *{visibility:hidden !important}
+  body.printing-report #printReport,body.printing-report #printReport *{visibility:visible !important}
+  body.printing-report #app,
+  body.printing-report #app .main,
+  body.printing-report #app .content,
+  body.printing-report .page[data-view="reportes"]{display:contents !important}
+  body.printing-report #app .sidebar,
+  body.printing-report #app .scrim,
+  body.printing-report #app .topbar,
+  body.printing-report .page[data-view="reportes"]>*:not(#printReport){display:none !important}
+  body.printing-report #printReport{display:block !important;position:static !important;width:100%;color:#111}
+  body.printing-report #reportPrintPages{display:block !important}
+  body.printing-cash-receipt #reportPrintPages{display:none !important}
+  body.printing-report:not(.printing-cash-receipt) #printCashReceipt{display:none !important}
+  body.printing-cash-receipt #printCashReceipt{display:block !important;position:absolute;inset:0 auto auto 0;width:100%;padding:0;color:#111;font:12pt/1.5 Arial,sans-serif}
+  body.printing-cash-receipt .cash-receipt-header{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;gap:24px}
+  body.printing-cash-receipt .cash-receipt-recipient h1{margin:0 0 28px;font:700 17pt/1.2 Arial,sans-serif}
+  body.printing-cash-receipt .cash-receipt-recipient p,
+  body.printing-cash-receipt .cash-receipt-meta p{margin:0 0 9px}
+  body.printing-cash-receipt .cash-receipt-meta{text-align:right}
+  body.printing-cash-receipt #printCashReceiptCheckNumber{white-space:nowrap}
+  body.printing-report .statement-page{page:report-statement;min-height:0;padding:0;border:0;border-radius:0;background:#fff}
+  body.printing-report .statement-header{padding-bottom:8mm;border-color:#aaa}
+  body.printing-report .statement-brand{font:700 16pt Arial,sans-serif}
+  body.printing-report .statement-heading{font:10pt/1.35 Arial,sans-serif}
+  body.printing-report .statement-heading h2{font:700 14pt Arial,sans-serif}
+  body.printing-report .statement-table{font:9pt/1.25 Arial,sans-serif}
+  body.printing-report .statement-page .table-scroll{overflow:visible}
+  body.printing-report .statement-table thead{display:table-header-group}
+  body.printing-report .statement-table tbody{display:table-row-group}
+  body.printing-report .statement-table th,body.printing-report .statement-table td{padding:5px 6px;border-color:#bbb}
+  body.printing-report .statement-table th{background:#eee !important;color:#111}
+  body.printing-report .statement-table .statement-final-balance th,
+  body.printing-report .statement-table .statement-final-balance td{border-top:2px solid #222;font-weight:700}
+  body.printing-report .statement-opening{font-style:italic}
+  body.printing-report .statement-table tr{break-inside:avoid;page-break-inside:avoid}
+  body.printing-withdrawal-order #app,
+  body.printing-withdrawal-order #app .main,
+  body.printing-withdrawal-order #app .content,
+  body.printing-withdrawal-order #app .page[data-view="choferes"]{display:contents !important}
+  body.printing-withdrawal-order #app .sidebar,
+  body.printing-withdrawal-order #app .scrim,
+  body.printing-withdrawal-order #app .topbar,
+  body.printing-withdrawal-order #app .page[data-view="choferes"]>*:not(#printOrder){display:none !important}
+  body.printing-withdrawal-order #printOrder{position:static !important}
+  #printOrder{display:block !important;position:absolute;inset:0 auto auto 0;width:100%;padding:0;color:#111;font:14pt/1.6 Arial,sans-serif}
+  #printCustomerOrder{display:block !important;position:absolute;inset:0 auto auto 0;width:100%;padding:0;color:#111;font:12pt/1.5 Arial,sans-serif}
+  body.printing-customer-order .page[data-view="clientes"]{display:block !important;max-width:none;margin:0}
+  body.printing-customer-order #printOrder{display:none !important}
+  body:not(.printing-customer-order) #printCustomerOrder{display:none !important}
+  .withdrawal-print header{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:24px;font-size:16pt}
+  .withdrawal-print header strong:last-child{text-align:right}
+  .withdrawal-print h1{text-align:center;margin:42px 0 30px;font-size:18pt}
+  .withdrawal-print-fields{row-gap:0}
+  .withdrawal-print-fields p{margin:0}
+  .withdrawal-print-full{grid-column:1/-1}
+  .payment-print>header{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:flex-start;gap:30px}
+  .payment-print>header>strong{font-size:16pt}
+  .payment-print-number{font-size:11pt;text-align:right}
+  .payment-detail{table-layout:fixed}
+  .withdrawal-payment-print .payment-detail{font:10pt/1.3 Arial,sans-serif}
+  .withdrawal-payment-print .payment-detail th,
+  .withdrawal-payment-print .payment-detail td{width:16.666%}
+  .withdrawal-payment-print .payment-detail th,
+  .withdrawal-payment-print .payment-detail td{padding:6px}
+  .payment-detail th,.payment-detail td{width:20%;white-space:normal;overflow-wrap:anywhere}
+  .payment-print>h2{margin-top:34px}
+  .payment-provider{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:24px}
+  .payment-signatures{break-inside:avoid}
+  .payment-detail th{background:#eee;color:#111}
+}
