@@ -1,5 +1,5 @@
 import { calcular } from '../domain/liquidacion.js';
-import { estadoVisual } from '../domain/estados.js';
+import { ESTADOS, estadoVisual } from '../domain/estados.js';
 import { dinero, numero, fecha, esc } from '../lib/format.js';
 
 const CHIPS = {
@@ -11,7 +11,8 @@ const CHIPS = {
 
 /** Chip de estado. Los viajes pagados llevan el tilde. */
 export function chipEstado(viaje) {
-  const [clase, texto] = CHIPS[estadoVisual(viaje)];
+  const [claseEstado, texto] = CHIPS[estadoVisual(viaje)];
+  const clase = viaje.estado === ESTADOS.FINALIZADO ? 'ok' : claseEstado;
   const tilde = viaje.pagado ? '<svg class="ic chip-tick" aria-hidden="true"><use href="#i-check"/></svg>' : '';
   return `<span class="chip ${clase}${viaje.pagado ? ' has-tick' : ''}">${tilde}${texto}</span>`;
 }
