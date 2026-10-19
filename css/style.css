@@ -36,6 +36,13 @@
     opacity:1;
   }
   :root:not([data-theme="light"]) input[type="date"]{color-scheme:dark}
+  :root:not([data-theme="light"]) .home-chart-header .controls{
+    scrollbar-color:var(--line-strong) var(--surface);
+  }
+  :root:not([data-theme="light"]) .home-chart-header .controls::-webkit-scrollbar{height:8px}
+  :root:not([data-theme="light"]) .home-chart-header .controls::-webkit-scrollbar-track{background:var(--surface)}
+  :root:not([data-theme="light"]) .home-chart-header .controls::-webkit-scrollbar-thumb{border-radius:999px;background:var(--line-strong)}
+  :root:not([data-theme="light"]) .home-chart-header .controls::-webkit-scrollbar-thumb:hover{background:var(--muted)}
 }
 :root[data-theme="dark"]{
   --maroon:#b43b43; --maroon-deep:#943138;
@@ -52,6 +59,11 @@
 }
 :root[data-theme="dark"] .input::placeholder{opacity:1}
 :root[data-theme="dark"] input[type="date"]{color-scheme:dark}
+:root[data-theme="dark"] .home-chart-header .controls{scrollbar-color:var(--line-strong) var(--surface)}
+:root[data-theme="dark"] .home-chart-header .controls::-webkit-scrollbar{height:8px}
+:root[data-theme="dark"] .home-chart-header .controls::-webkit-scrollbar-track{background:var(--surface)}
+:root[data-theme="dark"] .home-chart-header .controls::-webkit-scrollbar-thumb{border-radius:999px;background:var(--line-strong)}
+:root[data-theme="dark"] .home-chart-header .controls::-webkit-scrollbar-thumb:hover{background:var(--muted)}
 
 /* ============ Base ============ */
 *,*::before,*::after{box-sizing:inherit}
