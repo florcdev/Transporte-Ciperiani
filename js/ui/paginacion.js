@@ -37,8 +37,6 @@ export function renderizarPaginacion(navegacion, pagina, totalPaginas, atributo)
     + `<button class="page-button" type="button" ${atributoPagina}="${pagina + 1}" aria-label="Página siguiente"${pagina === totalPaginas ? ' disabled' : ''}>&gt;</button>`;
 }
 
-export function textoRangoPagina({ inicio, elementos, total }, nombre) {
-  return total
-    ? `Mostrando ${inicio + 1}-${inicio + elementos.length} de ${total} ${nombre}`
-    : `Mostrando 0 de 0 ${nombre}`;
+export function textoRangoPagina() {
+  return '';
 }

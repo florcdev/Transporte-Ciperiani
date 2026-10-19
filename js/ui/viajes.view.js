@@ -69,9 +69,7 @@ export function renderViajes() {
     : '<tr class="vacio"><td colspan="14" class="empty-cell">No hay viajes que coincidan con la búsqueda.</td></tr>';
   actualizarFilas(document.querySelector('[data-rows="all"]'), contenidoFilas);
 
-  $('tripCount').textContent = lista.length
-    ? `Mostrando ${inicio + 1}-${inicio + viajesPagina.length} de ${lista.length} viajes`
-    : 'Mostrando 0 de 0 viajes';
+  $('tripCount').textContent = '';
   renderPaginacion(totalPaginas);
 }
 

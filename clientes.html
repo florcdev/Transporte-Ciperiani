@@ -69,7 +69,7 @@
 
 <!-- ============ App ============ -->
 <div class="app" id="app" hidden>
-  
+
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-head">
       <button class="menu-btn sidebar-menu-btn" id="sidebarMenuBtn" type="button" aria-label="Contraer menú" aria-controls="sidebar" aria-expanded="true"><svg class="ic"><use href="#i-menu"/></svg></button>
@@ -94,7 +94,7 @@
         <h1 id="pageTitle">Inicio</h1>
         <div class="crumbs" id="pageCrumbs" hidden><a href="#viajes">Viajes</a><svg class="ic"><use href="#i-chev-r"/></svg><span></span></div>
       </div>
-      
+
     </header>
 
     <div class="content" id="content">
@@ -109,15 +109,15 @@
               <button class="btn btn-primary" type="button" id="btnNewCustomer"><svg class="ic"><use href="#i-plus"/></svg>Agregar cliente</button>
             </div>
           </div>
-          <div class="table-scroll"><table>
+          <div class="table-scroll"><table class="mobile-stacked-table">
             <thead><tr><th>Cliente</th><th>CUIT</th><th class="num">Importe generado</th><th class="num">Pagado</th><th class="num">Pendiente</th></tr></thead>
             <tbody id="customersBody"></tbody>
           </table></div>
         </section>
         <section class="card">
           <div class="card-h"><div><h2>Órdenes de pago</h2><p>Historial de pagos realizados a clientes.</p></div></div>
-          <div class="table-scroll"><table>
-            <thead><tr><th>Número de orden</th><th>Fecha</th><th>Cliente</th><th class="num">Total</th><th class="table-actions" aria-label="Imprimir"></th></tr></thead>
+          <div class="table-scroll"><table class="mobile-stacked-table">
+            <thead><tr><th>Número</th><th>Fecha</th><th>Cliente</th><th class="num">Total</th><th class="table-actions" aria-label="Imprimir"></th></tr></thead>
             <tbody id="customerPaymentsBody"></tbody>
           </table></div>
           <div class="table-f">

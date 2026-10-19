@@ -473,9 +473,9 @@ export function renderChoferes() {
       const saldo = saldos.get(chofer.id);
       const disponible = disponibleDe(saldo);
       return `<tr data-driver-row="${chofer.id}">
-        <td><button class="catalog-row-link" type="button">${esc(chofer.nombre)}</button></td><td>${esc(chofer.cuit || '—')}</td><td>${esc(chofer.telefono || '—')}</td><td>${esc(chofer.camion?.patente || chofer.patente || '—')}</td>
-        <td class="num">${saldo.viajes}</td>
-        <td class="num"><strong>${dineroConCentavos(disponible)}</strong></td>
+        <td data-label="Chofer"><button class="catalog-row-link" type="button">${esc(chofer.nombre)}</button></td><td data-label="CUIT">${esc(chofer.cuit || '—')}</td><td data-label="Teléfono">${esc(chofer.telefono || '—')}</td><td data-label="Patente del camión">${esc(chofer.camion?.patente || chofer.patente || '—')}</td>
+        <td class="num" data-label="Viajes realizados">${saldo.viajes}</td>
+        <td class="num" data-label="Saldo disponible"><strong>${dineroConCentavos(disponible)}</strong></td>
       </tr>`;
     }).join('')
     : '<tr><td class="empty-cell" colspan="6">Todavía no hay choferes. Agregá el primero para comenzar.</td></tr>';
@@ -487,9 +487,9 @@ export function renderChoferes() {
   renderizarPaginacion($('withdrawalPagination'), paginaOrdenes.pagina, paginaOrdenes.totalPaginas, 'withdrawal');
   $('withdrawalsBody').innerHTML = paginaOrdenes.total
     ? paginaOrdenes.elementos.map(orden => `<tr>
-      <td>${esc(orden.numero)}</td><td>${esc(fechaHora(orden.creado))}</td>
-      <td>${esc(orden.chofer?.nombre || '—')}</td><td class="num">${dineroConCentavos(orden.total)}</td>
-      <td class="table-actions"><div class="driver-actions">
+      <td data-label="Número">${esc(orden.numero)}</td><td data-label="Fecha">${esc(fechaHora(orden.creado))}</td>
+      <td data-label="Chofer">${esc(orden.chofer?.nombre || '—')}</td><td class="num" data-label="Total">${dineroConCentavos(orden.total)}</td>
+      <td class="table-actions" data-label="Imprimir"><div class="driver-actions">
         <button class="icon-btn" type="button" data-print-order="${orden.id}" aria-label="Imprimir orden ${esc(orden.numero)}" title="Imprimir"><svg class="ic" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 8V3h10v5M7 17H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M7 14h10v7H7zM17 11h.01"/></svg></button>
       </div></td>
     </tr>`).join('')

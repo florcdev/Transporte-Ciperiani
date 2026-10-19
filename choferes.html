@@ -69,7 +69,7 @@
 
 <!-- ============ App ============ -->
 <div class="app" id="app" hidden>
-  
+
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-head">
       <button class="menu-btn sidebar-menu-btn" id="sidebarMenuBtn" type="button" aria-label="Contraer menú" aria-controls="sidebar" aria-expanded="true"><svg class="ic"><use href="#i-menu"/></svg></button>
@@ -94,7 +94,7 @@
         <h1 id="pageTitle">Inicio</h1>
         <div class="crumbs" id="pageCrumbs" hidden><a href="#viajes">Viajes</a><svg class="ic"><use href="#i-chev-r"/></svg><span></span></div>
       </div>
-      
+
     </header>
 
     <div class="content" id="content">
@@ -109,15 +109,15 @@
               <button class="btn btn-primary" type="button" id="btnNewDriver"><svg class="ic"><use href="#i-plus"/></svg>Agregar chofer</button>
             </div>
           </div>
-          <div class="table-scroll"><table>
+          <div class="table-scroll"><table class="mobile-stacked-table">
             <thead><tr><th>Chofer</th><th>CUIT</th><th>Teléfono</th><th>Patente del camión</th><th class="num">Viajes realizados</th><th class="num">Saldo disponible</th></tr></thead>
             <tbody id="driversBody"></tbody>
           </table></div>
         </section>
         <section class="card">
           <div class="card-h"><div><h2>Órdenes de retiro</h2><p>Historial de pagos, adelantos y gastos registrados para los choferes.</p></div></div>
-          <div class="table-scroll"><table>
-            <thead><tr><th>Número de orden</th><th>Fecha</th><th>Chofer</th><th class="num">Total</th><th class="table-actions" aria-label="Imprimir"></th></tr></thead>
+          <div class="table-scroll"><table class="mobile-stacked-table">
+            <thead><tr><th>Número</th><th>Fecha</th><th>Chofer</th><th class="num">Total</th><th class="table-actions" aria-label="Imprimir"></th></tr></thead>
             <tbody id="withdrawalsBody"></tbody>
           </table></div>
           <div class="table-f">

@@ -156,9 +156,9 @@ export function renderClientes() {
     ? clientesActivos.map(cliente => {
       const saldo = saldos.get(cliente.id);
       return `<tr data-customer-row="${cliente.id}">
-        <td><button class="catalog-row-link" type="button">${esc(cliente.nombre)}</button></td><td>${esc(cliente.cuit || '—')}</td>
-        <td class="num">${dineroConCentavos(saldo.generado)}</td><td class="num">${dineroConCentavos(saldo.pagado)}</td>
-        <td class="num"><strong>${dineroConCentavos(pendienteDe(saldo))}</strong></td>
+        <td data-label="Cliente"><button class="catalog-row-link" type="button">${esc(cliente.nombre)}</button></td><td data-label="CUIT">${esc(cliente.cuit || '—')}</td>
+        <td class="num" data-label="Importe generado">${dineroConCentavos(saldo.generado)}</td><td class="num" data-label="Pagado">${dineroConCentavos(saldo.pagado)}</td>
+        <td class="num" data-label="Pendiente"><strong>${dineroConCentavos(pendienteDe(saldo))}</strong></td>
       </tr>`;
     }).join('')
     : '<tr><td class="empty-cell" colspan="5">Todavía no hay clientes. Agregá el primero para comenzar.</td></tr>';
@@ -170,10 +170,10 @@ export function renderClientes() {
   renderizarPaginacion($('customerPaymentPagination'), pagina.pagina, pagina.totalPaginas, 'customer-payment');
   $('customerPaymentsBody').innerHTML = pagina.total
     ? pagina.elementos.map(orden => `<tr>
-      <td>${esc(orden.numero)}</td><td>${esc(fechaHora(orden.creado))}</td>
-      <td>${esc(state.clientes.find(cliente => cliente.id === orden.clienteId)?.nombre || '—')}</td>
-      <td class="num">${dineroConCentavos(orden.total)}</td>
-      <td class="table-actions"><button class="icon-btn" type="button" data-print-customer-order="${orden.id}" aria-label="Imprimir orden ${esc(orden.numero)}" title="Imprimir"><svg class="ic" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 8V3h10v5M7 17H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M7 14h10v7H7zM17 11h.01"/></svg></button></td>
+      <td data-label="Número">${esc(orden.numero)}</td><td data-label="Fecha">${esc(fechaHora(orden.creado))}</td>
+      <td data-label="Cliente">${esc(state.clientes.find(cliente => cliente.id === orden.clienteId)?.nombre || '—')}</td>
+      <td class="num" data-label="Total">${dineroConCentavos(orden.total)}</td>
+      <td class="table-actions" data-label="Imprimir"><button class="icon-btn" type="button" data-print-customer-order="${orden.id}" aria-label="Imprimir orden ${esc(orden.numero)}" title="Imprimir"><svg class="ic" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 8V3h10v5M7 17H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M7 14h10v7H7zM17 11h.01"/></svg></button></td>
     </tr>`).join('')
     : '<tr><td class="empty-cell" colspan="5">Todavía no hay órdenes de pago registradas.</td></tr>';
 }

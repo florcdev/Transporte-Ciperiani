@@ -455,6 +455,17 @@ body.drawer{overflow:hidden}
   .toolbar .tools{width:100%}
   .toolbar .tools .btn{flex:1}
   .auth-box .two{grid-template-columns:1fr}
+  table.mobile-stacked-table thead{display:none}
+  table.mobile-stacked-table tbody{display:block}
+  table.mobile-stacked-table tbody tr{display:block;padding:12px 14px;border-bottom:1px solid var(--line)}
+  table.mobile-stacked-table tbody tr:last-child{border-bottom:0}
+  table.mobile-stacked-table td.empty-cell{display:block;padding:20px 8px;border:0}
+  table.mobile-stacked-table td[data-label]{display:grid;grid-template-columns:minmax(70px,112px) minmax(0,1fr);align-items:center;gap:4px 12px;padding:6px 0;border:0;white-space:normal;text-align:left}
+  table.mobile-stacked-table td[data-label]::before{content:attr(data-label);font-size:11.5px;font-weight:700;color:var(--muted)}
+  table.mobile-stacked-table td.num{text-align:left}
+  table.mobile-stacked-table td.table-actions{display:flex;justify-content:flex-end;align-items:center;gap:8px;padding-top:10px}
+  table.mobile-stacked-table td.table-actions::before{content:attr(data-label);margin-right:auto;display:block;font-size:11.5px;font-weight:700;color:var(--muted)}
+  table.mobile-stacked-table .table-actions .driver-actions{justify-content:flex-end;flex-wrap:nowrap}
   .table-f{flex-direction:column;align-items:flex-start}
   .content.page-viajes .table-f{flex-direction:row;align-items:center}
   .content.page-viajes .table-f #tripCount{display:none}

@@ -155,9 +155,9 @@ export function renderCamiones() {
   const camiones = state.camiones.filter(camion => camion.activo !== false);
   $('trucksBody').innerHTML = camiones.length
     ? camiones.map(camion => `<tr data-truck-row="${camion.id}">
-        <td><button class="catalog-row-link" type="button">${esc(camion.patente)}</button></td>
-        <td>${esc(camion.marca || '—')}</td>
-        <td>${esc(camion.modelo || '—')}</td>
+        <td data-label="Patente"><button class="catalog-row-link" type="button">${esc(camion.patente)}</button></td>
+        <td data-label="Marca">${esc(camion.marca || '—')}</td>
+        <td data-label="Modelo">${esc(camion.modelo || '—')}</td>
       </tr>`).join('')
     : '<tr><td class="empty-cell" colspan="3">Todavía no hay camiones. Agregá el primero para comenzar.</td></tr>';
 }
