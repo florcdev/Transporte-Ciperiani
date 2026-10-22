@@ -1,6 +1,7 @@
 import { supabase } from '../lib/supabase.js';
 
 const SELECT = '*, camion:camiones(id, patente, marca, modelo), chofer:choferes(id, nombre, patente, camion_id, camion:camiones(id, patente, marca, modelo)), cliente:clientes(id, nombre)';
+const numeroOpcional = valor => valor == null ? null : Number(valor);
 
 /** Fila de la base -> modelo que usa la aplicación. */
 const aModelo = r => {
@@ -13,21 +14,21 @@ const aModelo = r => {
   return {
     id: r.id,
     codigo: r.codigo,
-    fecha: r.fecha,
-    origen: r.origen,
-    destino: r.destino,
+    fecha: r.fecha ?? '',
+    origen: r.origen ?? '',
+    destino: r.destino ?? '',
     ctg: r.ctg ?? '',
     camionId: r.camion_id ?? r.camion?.id ?? r.chofer?.camion_id ?? r.chofer?.camion?.id ?? null,
     choferId: r.chofer_id,
     camion,
-    chofer: r.chofer,
+    chofer: r.chofer || { id: null, nombre: '' },
     clienteId: r.cliente_id ?? r.cliente?.id ?? null,
     cliente: r.cliente ?? null,
-    toneladas: Number(r.toneladas),
-    tarifa: Number(r.tarifa),
-    comisionPct: Number(r.comision_porcentaje),
-    gananciaChoferPct: Number(r.ganancia_chofer_porcentaje ?? 15),
-    adelanto: Number(r.adelanto),
+    toneladas: numeroOpcional(r.toneladas),
+    tarifa: numeroOpcional(r.tarifa),
+    comisionPct: numeroOpcional(r.comision_porcentaje),
+    gananciaChoferPct: numeroOpcional(r.ganancia_chofer_porcentaje),
+    adelanto: numeroOpcional(r.adelanto),
     gastosExtra: r.gastos_extra ?? [],
     estado: r.estado,
     pagado: r.estado_pago === 'PAGADO',
@@ -37,9 +38,9 @@ const aModelo = r => {
 
 /** Modelo -> columnas editables. fecha_pago la completa un trigger en la base. */
 const aFila = v => ({
-  fecha: v.fecha,
-  origen: v.origen,
-  destino: v.destino,
+  fecha: v.fecha || null,
+  origen: v.origen || null,
+  destino: v.destino || null,
   ctg: v.ctg || null,
   camion_id: v.camionId,
   chofer_id: v.choferId,

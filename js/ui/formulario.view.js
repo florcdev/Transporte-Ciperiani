@@ -2,10 +2,7 @@ import { state, guardarViaje } from '../state.js';
 import { crearViaje, actualizarViaje } from '../services/viajes.service.js';
 import { calcular, GANANCIA_CHOFER_POR_DEFECTO } from '../domain/liquidacion.js';
 import { ESTADOS } from '../domain/estados.js';
-import { dinero, hoyISO, esc } from '../lib/format.js';
-import { leerAjustes } from '../lib/ajustes.js';
-import { buscarLocalidadesArgentina } from '../services/localidades.service.js';
-import { mostrarErrorCamposObligatorios } from './validacion.js';
+import { dinero, esc } from '../lib/format.js';
 
 const $ = id => document.getElementById(id);
 const CAMPOS = ['fecha', 'origen', 'destino', 'clienteId', 'camionId', 'choferId', 'ctg', 'toneladas', 'tarifa', 'comisionPct', 'gananciaChoferPct', 'adelanto', 'estado'];
@@ -13,11 +10,6 @@ const CAMPOS = ['fecha', 'origen', 'destino', 'clienteId', 'camionId', 'choferId
 let modal, form, error, alGuardar;
 let editandoId = null;
 let siguienteIdGasto = 0;
-const solicitudesLocalidad = { origen: 0, destino: 0 };
-const temporizadoresLocalidad = { origen: null, destino: null };
-const opcionesLocalidad = { origen: new Set(), destino: new Set() };
-const ubicacionOriginal = { origen: '', destino: '' };
-const ubicacionValidada = { origen: '', destino: '' };
 
 export function iniciarFormulario({ onGuardado }) {
   modal = $('tripModal');
@@ -27,10 +19,7 @@ export function iniciarFormulario({ onGuardado }) {
 
   document.querySelectorAll('[data-close-modal]').forEach(el => el.addEventListener('click', cerrar));
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) cerrar(); });
-  form.addEventListener('input', e => {
-    actualizarCalculo();
-    if (e.target.name === 'origen' || e.target.name === 'destino') buscarLocalidades(e.target.name);
-  });
+  form.addEventListener('input', actualizarCalculo);
   form.addEventListener('change', e => {
     if (e.target.name === 'estado') {
       actualizarIndicadoresPrioritarios();
@@ -42,10 +31,6 @@ export function iniciarFormulario({ onGuardado }) {
     }
     if (e.target.name === 'choferId') {
       asignarPatenteDelChofer();
-      return;
-    }
-    if (e.target.name === 'origen' || e.target.name === 'destino') {
-      validarLocalidadSeleccionada(e.target.name);
       return;
     }
     if (!e.target.matches('.expense-destination')) return;
@@ -95,32 +80,23 @@ export function abrirFormulario(viaje = null) {
     .map(([valor, texto]) => `<option value="${valor}">${texto}</option>`).join('');
 
   const v = viaje ?? {
-    fecha: hoyISO(), origen: '', destino: '', clienteId: '', camionId: '', choferId: '', ctg: '',
-    toneladas: '', tarifa: '', comisionPct: leerAjustes().comisionPct,
-    gananciaChoferPct: GANANCIA_CHOFER_POR_DEFECTO, adelanto: 0,
+    fecha: '', origen: '', destino: '', clienteId: '', camionId: '', choferId: '', ctg: '',
+    toneladas: '', tarifa: '', comisionPct: '',
+    gananciaChoferPct: GANANCIA_CHOFER_POR_DEFECTO, adelanto: '',
     estado: 'EN_PROCESO', pagado: false
   };
   CAMPOS.forEach(nombre => {
     form.elements[nombre].value = nombre === 'gananciaChoferPct'
-      ? v[nombre] ?? GANANCIA_CHOFER_POR_DEFECTO
-      : v[nombre];
+      ? v[nombre] ?? (viaje ? '' : GANANCIA_CHOFER_POR_DEFECTO)
+      : v[nombre] ?? '';
   });
   const chofer = state.choferes.find(item => Number(item.id) === Number(v.choferId));
   const camionId = v.camionId ?? v.camion?.id ?? chofer?.camionId ?? chofer?.camion?.id ?? '';
   form.elements.camionId.value = camionId;
   form.elements.camionPatente.value = v.camion?.patente || chofer?.camion?.patente || chofer?.patente || '';
-  ['origen', 'destino'].forEach(nombre => {
-    clearTimeout(temporizadoresLocalidad[nombre]);
-    solicitudesLocalidad[nombre] += 1;
-    const lista = $(`localidades${nombre[0].toUpperCase()}${nombre.slice(1)}`);
-    lista.replaceChildren();
-    opcionesLocalidad[nombre].clear();
-    ubicacionOriginal[nombre] = viaje?.[nombre] || '';
-    ubicacionValidada[nombre] = ubicacionOriginal[nombre];
-    $(`f-${nombre}-help`).textContent = viaje?.[nombre]
-      ? 'El recorrido existente se conserva; elegí una sugerencia oficial si lo cambiás.'
-      : 'Buscá y elegí una localidad argentina.';
-  });
+  $('f-camion-help').textContent = form.elements.camionPatente.value
+    ? `Patente asignada al chofer${chofer ? ` ${chofer.nombre}` : ''}.`
+    : 'La asignación de camión es opcional.';
   form.elements.pagado.checked = v.pagado;
   actualizarAyudaCamion(chofer);
   actualizarIndicadoresPrioritarios();
@@ -148,74 +124,25 @@ function leer() {
     clienteId: Number(fila.querySelector('.expense-customer').value) || null
   })).filter(gasto => gasto.descripcion || gasto.monto || gasto.destino);
   return {
-    fecha: f.fecha.value,
+    fecha: f.fecha.value || null,
     origen: f.origen.value.trim(),
     destino: f.destino.value.trim(),
     clienteId: Number(f.clienteId.value) || null,
     camionId: Number(f.camionId.value) || null,
-    choferId: Number(f.choferId.value),
-    ctg: f.ctg.value.trim(),
-    toneladas: Number(f.toneladas.value),
-    tarifa: Number(f.tarifa.value),
-    comisionPct: Number(f.comisionPct.value),
-    gananciaChoferPct: Number(f.gananciaChoferPct.value),
-    adelanto: Number(f.adelanto.value || 0),
+    choferId: Number(f.choferId.value) || null,
+    ctg: f.ctg.value.trim() || null,
+    toneladas: numeroOpcional(f.toneladas.value),
+    tarifa: numeroOpcional(f.tarifa.value),
+    comisionPct: numeroOpcional(f.comisionPct.value),
+    gananciaChoferPct: numeroOpcional(f.gananciaChoferPct.value),
+    adelanto: numeroOpcional(f.adelanto.value),
     estado: f.estado.value,
     pagado: f.pagado.checked,
     gastosExtra
   };
 }
 
-function buscarLocalidades(campo) {
-  const valor = form.elements[campo].value.trim();
-  if (valor === ubicacionValidada[campo] || valor === ubicacionOriginal[campo]) return;
-  if (opcionesLocalidad[campo].has(valor)) {
-    ubicacionValidada[campo] = valor;
-    return;
-  }
-  ubicacionValidada[campo] = '';
-  clearTimeout(temporizadoresLocalidad[campo]);
-  const solicitud = ++solicitudesLocalidad[campo];
-  opcionesLocalidad[campo].clear();
-  $(`localidades${campo[0].toUpperCase()}${campo.slice(1)}`).replaceChildren();
-  if (valor.length < 3) {
-    $(`f-${campo}-help`).textContent = 'Ingresá al menos 3 letras para buscar en localidades argentinas.';
-    return;
-  }
-
-  $(`f-${campo}-help`).textContent = 'Buscando localidades argentinas...';
-  temporizadoresLocalidad[campo] = setTimeout(async () => {
-    try {
-      const localidades = await buscarLocalidadesArgentina(valor);
-      if (solicitud !== solicitudesLocalidad[campo] || form.elements[campo].value.trim() !== valor) return;
-      const lista = $(`localidades${campo[0].toUpperCase()}${campo.slice(1)}`);
-      lista.replaceChildren();
-      opcionesLocalidad[campo].clear();
-      localidades.forEach(localidad => {
-        opcionesLocalidad[campo].add(localidad.etiqueta);
-        const opcion = document.createElement('option');
-        opcion.value = localidad.etiqueta;
-        lista.append(opcion);
-      });
-      if (opcionesLocalidad[campo].has(valor)) ubicacionValidada[campo] = valor;
-      $(`f-${campo}-help`).textContent = localidades.length
-        ? 'Elegí una localidad de la lista para guardar su nombre oficial.'
-        : 'No se encontraron localidades. Probá con otro nombre.';
-    } catch (cause) {
-      if (solicitud !== solicitudesLocalidad[campo]) return;
-      $(`f-${campo}-help`).textContent = `No se pudieron consultar las localidades: ${cause.message}`;
-    }
-  }, 300);
-}
-
-function validarLocalidadSeleccionada(campo) {
-  const valor = form.elements[campo].value.trim();
-  if (opcionesLocalidad[campo].has(valor)) ubicacionValidada[campo] = valor;
-}
-
-function localidadValida(campo, valor) {
-  return valor && (valor === ubicacionOriginal[campo] || valor === ubicacionValidada[campo]);
-}
+const numeroOpcional = valor => valor === '' ? null : Number(valor);
 
 function asignarPatenteDelChofer() {
   const idChofer = Number(form.elements.choferId.value);
@@ -252,20 +179,23 @@ function actualizarIndicadoresPrioritarios() {
 }
 
 function esInvalido(v) {
-  return !v.fecha || !localidadValida('origen', v.origen) || !localidadValida('destino', v.destino)
-    || !v.clienteId || !state.clientes.some(cliente => Number(cliente.id) === v.clienteId)
-    || !v.choferId || !v.camionId
-    || !(v.toneladas > 0)
-    || form.elements.tarifa.value === '' || !(v.tarifa >= 0)
-    || form.elements.comisionPct.value === ''
-    || !(v.comisionPct >= 0 && v.comisionPct <= 100)
-    || form.elements.gananciaChoferPct.value === ''
-    || !(v.gananciaChoferPct >= 0 && v.gananciaChoferPct <= 100)
-    || !(v.adelanto >= 0)
-    || v.gastosExtra.some(gasto => !gasto.descripcion || !(gasto.monto > 0)
-      || !['chofer', 'cliente'].includes(gasto.destino)
-      || (gasto.destino === 'cliente' && (!gasto.clienteId
-        || !state.clientes.some(cliente => Number(cliente.id) === Number(gasto.clienteId)))));
+  const f = form.elements;
+  const gastoIncompleto = [...$('tripExpenses').querySelectorAll('.trip-expense')].some(fila => {
+    const descripcion = fila.querySelector('.expense-description').value.trim();
+    const monto = fila.querySelector('.expense-amount').value;
+    const destino = fila.querySelector('.expense-destination').value;
+    const cliente = fila.querySelector('.expense-customer').value;
+    if (!descripcion && !monto && !destino && !cliente) return false;
+    return !descripcion || !(Number(monto) > 0) || !['chofer', 'cliente'].includes(destino)
+      || (destino === 'cliente' && !state.clientes.some(item => Number(item.id) === Number(cliente)));
+  });
+  return (v.clienteId && !state.clientes.some(cliente => Number(cliente.id) === v.clienteId))
+    || (f.toneladas.value !== '' && !(v.toneladas > 0))
+    || (f.tarifa.value !== '' && !(v.tarifa >= 0))
+    || (f.comisionPct.value !== '' && !(v.comisionPct >= 0 && v.comisionPct <= 100))
+    || (f.gananciaChoferPct.value !== '' && !(v.gananciaChoferPct >= 0 && v.gananciaChoferPct <= 100))
+    || (f.adelanto.value !== '' && !(v.adelanto >= 0))
+    || gastoIncompleto;
 }
 
 function agregarGasto(gasto = {}) {
@@ -311,46 +241,27 @@ async function guardar(e) {
   const datos = leer();
 
   if (esInvalido(datos)) {
-    const localidadesInvalidas = !localidadValida('origen', datos.origen) || !localidadValida('destino', datos.destino);
     const camposInvalidos = [];
-    const camposFaltantes = [...form.querySelectorAll('[required]')].filter(campo =>
-      !campo.disabled
-      && campo.type !== 'hidden'
-      && !campo.closest('[hidden]')
-      && !campo.value.trim()
-    );
     const f = form.elements;
-    if (!datos.fecha) camposInvalidos.push(f.fecha);
-    if (!localidadValida('origen', datos.origen)) camposInvalidos.push(f.origen);
-    if (!localidadValida('destino', datos.destino)) camposInvalidos.push(f.destino);
-    if (!datos.clienteId || !state.clientes.some(cliente => Number(cliente.id) === datos.clienteId)) camposInvalidos.push(f.clienteId);
-    if (!datos.camionId) camposInvalidos.push(f.choferId);
-    if (!datos.choferId) camposInvalidos.push(f.choferId);
-    if (!(datos.toneladas > 0)) camposInvalidos.push(f.toneladas);
-    if (f.tarifa.value === '' || !(datos.tarifa >= 0)) camposInvalidos.push(f.tarifa);
-    if (f.comisionPct.value === '' || !(datos.comisionPct >= 0 && datos.comisionPct <= 100)) camposInvalidos.push(f.comisionPct);
-    if (f.gananciaChoferPct.value === '' || !(datos.gananciaChoferPct >= 0 && datos.gananciaChoferPct <= 100)) camposInvalidos.push(f.gananciaChoferPct);
-    if (!(datos.adelanto >= 0)) camposInvalidos.push(f.adelanto);
+    if (datos.clienteId && !state.clientes.some(cliente => Number(cliente.id) === datos.clienteId)) camposInvalidos.push(f.clienteId);
+    if (f.toneladas.value !== '' && !(datos.toneladas > 0)) camposInvalidos.push(f.toneladas);
+    if (f.tarifa.value !== '' && !(datos.tarifa >= 0)) camposInvalidos.push(f.tarifa);
+    if (f.comisionPct.value !== '' && !(datos.comisionPct >= 0 && datos.comisionPct <= 100)) camposInvalidos.push(f.comisionPct);
+    if (f.gananciaChoferPct.value !== '' && !(datos.gananciaChoferPct >= 0 && datos.gananciaChoferPct <= 100)) camposInvalidos.push(f.gananciaChoferPct);
+    if (f.adelanto.value !== '' && !(datos.adelanto >= 0)) camposInvalidos.push(f.adelanto);
     [...$('tripExpenses').querySelectorAll('.trip-expense')].forEach(fila => {
       const descripcion = fila.querySelector('.expense-description');
       const monto = fila.querySelector('.expense-amount');
       const destino = fila.querySelector('.expense-destination');
       const cliente = fila.querySelector('.expense-customer');
+      if (!descripcion.value.trim() && !monto.value && !destino.value && !cliente.value) return;
       if (!descripcion.value.trim() || !(Number(monto.value) > 0) || !['chofer', 'cliente'].includes(destino.value)) {
         camposInvalidos.push(descripcion, monto, destino);
-        if (!descripcion.value.trim()) camposFaltantes.push(descripcion);
-        if (!monto.value.trim()) camposFaltantes.push(monto);
-        if (!destino.value) camposFaltantes.push(destino);
       }
       if (destino.value === 'cliente' && (!cliente.value || !state.clientes.some(item => item.id === Number(cliente.value)))) {
         camposInvalidos.push(cliente);
-        if (!cliente.value) camposFaltantes.push(cliente);
       }
     });
-    if (camposFaltantes.length) {
-      mostrarErrorCamposObligatorios(form, camposFaltantes);
-      return;
-    }
     form.querySelectorAll('[aria-invalid="true"]').forEach(campo => {
       campo.removeAttribute('aria-invalid');
       campo.closest('.field')?.classList.remove('has-required-error');
@@ -359,11 +270,7 @@ async function guardar(e) {
       campo.setAttribute('aria-invalid', 'true');
       campo.closest('.field')?.classList.add('has-required-error');
     });
-    error.textContent = localidadesInvalidas
-      ? 'Buscá el origen y el destino en las sugerencias de Georef y elegí la localidad oficial.'
-      : !datos.camionId
-        ? 'Asignale un camión al chofer desde la pantalla Choferes.'
-      : 'Revisá los valores ingresados; hay datos fuera del rango permitido.';
+    error.textContent = 'Revisá los valores ingresados. Los campos numéricos deben respetar los rangos indicados y cada gasto extra debe estar completo.';
     error.hidden = false;
     return;
   }

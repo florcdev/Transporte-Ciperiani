@@ -215,6 +215,7 @@
         <h2 id="tripModalTitle">Nuevo viaje</h2>
         </div>
         <div class="card-b modal-body">
+        <p class="field-help">Completá los datos que tengas; podés editar el viaje más adelante para agregar lo que falte.</p>
         <div class="trip-priority-controls" aria-label="Estado y pago del viaje">
             <div class="trip-priority-card trip-status-control status-process" id="tripStatusControl">
                 <label for="f-estado">Estado del viaje</label>
@@ -228,26 +229,22 @@
         <div class="group">
             <h3>Recorrido</h3>
             <div class="fields">
-            <div class="field"><label for="f-fecha">Fecha</label><input class="input" id="f-fecha" name="fecha" type="date" required></div>
+            <div class="field"><label for="f-fecha">Fecha</label><input class="input" id="f-fecha" name="fecha" type="date"></div>
             <div class="field">
               <label for="f-origen">Origen</label>
-              <input class="input" id="f-origen" name="origen" list="localidadesOrigen" autocomplete="off" aria-describedby="f-origen-help" required>
-              <datalist id="localidadesOrigen"></datalist>
-              <small class="field-help" id="f-origen-help" aria-live="polite">Buscá y elegí una localidad argentina.</small>
+              <input class="input" id="f-origen" name="origen" autocomplete="off" placeholder="Escribí el origen">
             </div>
             <div class="field">
               <label for="f-destino">Destino</label>
-              <input class="input" id="f-destino" name="destino" list="localidadesDestino" autocomplete="off" aria-describedby="f-destino-help" required>
-              <datalist id="localidadesDestino"></datalist>
-              <small class="field-help" id="f-destino-help" aria-live="polite">Buscá y elegí una localidad argentina.</small>
+              <input class="input" id="f-destino" name="destino" autocomplete="off" placeholder="Escribí el destino">
             </div>
-            <div class="field"><label for="f-cliente">Cliente</label><select class="input" id="f-cliente" name="clienteId" required></select></div>
+            <div class="field"><label for="f-cliente">Cliente</label><select class="input" id="f-cliente" name="clienteId"></select></div>
             </div>
         </div>
         <div class="group">
             <h3>Camión y chofer</h3>
             <div class="fields two">
-            <div class="field"><label for="f-chofer">Chofer</label><select class="input" id="f-chofer" name="choferId" required></select></div>
+            <div class="field"><label for="f-chofer">Chofer</label><select class="input" id="f-chofer" name="choferId"></select></div>
             <div class="field"><label for="f-camion-patente">Patente del camión</label><input class="input trip-truck-plate" id="f-camion-patente" name="camionPatente" readonly disabled aria-describedby="f-camion-help"><input id="f-camion" name="camionId" type="hidden" required><small class="field-help" id="f-camion-help" aria-live="polite">Elegí un chofer para ver su patente asignada.</small></div>
             </div>
         </div>
@@ -255,10 +252,10 @@
             <h3>Carga y liquidación</h3>
             <div class="fields">
             <div class="field"><label for="f-ctg">CTG</label><input class="input" id="f-ctg" name="ctg" inputmode="numeric"></div>
-            <div class="field"><label for="f-toneladas">Toneladas</label><input class="input" id="f-toneladas" name="toneladas" type="number" min="0" step="0.01" inputmode="decimal" required></div>
-            <div class="field"><label for="f-tarifa">Tarifa por tonelada ($)</label><input class="input" id="f-tarifa" name="tarifa" type="number" min="0" step="0.01" inputmode="decimal" required></div>
-            <div class="field"><label for="f-comision">Comisión (%)</label><input class="input" id="f-comision" name="comisionPct" type="number" min="0" max="100" step="0.01" inputmode="decimal" required></div>
-            <div class="field"><label for="f-ganancia-chofer">Ganancia del chofer (%)</label><input class="input" id="f-ganancia-chofer" name="gananciaChoferPct" type="number" min="0" max="100" step="0.01" inputmode="decimal" required></div>
+            <div class="field"><label for="f-toneladas">Toneladas</label><input class="input" id="f-toneladas" name="toneladas" type="number" min="0" step="0.01" inputmode="decimal"></div>
+            <div class="field"><label for="f-tarifa">Tarifa por tonelada ($)</label><input class="input" id="f-tarifa" name="tarifa" type="number" min="0" step="0.01" inputmode="decimal"></div>
+            <div class="field"><label for="f-comision">Comisión (%)</label><input class="input" id="f-comision" name="comisionPct" type="number" min="0" max="100" step="0.01" inputmode="decimal"></div>
+            <div class="field"><label for="f-ganancia-chofer">Ganancia del chofer (%)</label><input class="input" id="f-ganancia-chofer" name="gananciaChoferPct" type="number" min="0" max="100" step="0.01" inputmode="decimal"></div>
             <div class="field"><label for="f-adelanto">Adelanto al chofer ($)</label><input class="input" id="f-adelanto" name="adelanto" type="number" min="0" step="0.01" inputmode="decimal"></div>
             </div>
         </div>

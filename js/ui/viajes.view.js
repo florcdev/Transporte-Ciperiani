@@ -38,7 +38,7 @@ export function iniciarViajes({ onNuevo }) {
 }
 
 const textoBusqueda = v =>
-  [v.codigo, v.origen, v.destino, v.cliente?.nombre, v.ctg, v.camion?.patente, v.chofer.nombre,
+  [v.codigo, v.origen, v.destino, v.cliente?.nombre, v.ctg, v.camion?.patente, v.chofer?.nombre,
     ...(v.gastosExtra || []).map(gasto => gasto.descripcion)].join(' ').toLowerCase();
 
 export function renderViajes() {
@@ -56,7 +56,7 @@ export function renderViajes() {
     && (!clienteId || Number(v.clienteId) === clienteId || (v.gastosExtra || []).some(gasto =>
       gasto.destino === 'cliente' && Number(gasto.clienteId) === clienteId))
     && (!q || textoBusqueda(v).includes(q)))
-    .sort((a, b) => b.fecha.localeCompare(a.fecha) || b.id - a.id);
+    .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || '') || b.id - a.id);
   actualizarTarjetas();
 
   const totalPaginas = Math.ceil(lista.length / VIAJES_POR_PAGINA);

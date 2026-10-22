@@ -11,7 +11,7 @@ const filaVacia = nombre => ({
 function sumar(fila, viaje) {
   const c = calcular(viaje);
   fila.viajes += 1;
-  fila.toneladas += viaje.toneladas;
+  fila.toneladas += Number(viaje.toneladas) || 0;
   CAMPOS.forEach(k => { fila[k] += c[k]; });
   return fila;
 }
@@ -27,7 +27,7 @@ const CLAVES = {
     const modelo = [v.camion?.marca, v.camion?.modelo].filter(Boolean).join(' ');
     return [v.camionId ?? patente, modelo ? `${patente} · ${modelo}` : patente];
   },
-  chofer: v => [v.choferId, v.chofer.nombre]
+  chofer: v => [v.choferId ?? 'sin-chofer', v.chofer?.nombre || 'Sin chofer asignado']
 };
 
 /** modo: 'general' | 'camion' | 'chofer'. Devuelve una fila por grupo. */
@@ -63,6 +63,7 @@ const TRAMOS = [['1–7', 7], ['8–14', 14], ['15–21', 21], ['22–31', 31]];
 export function porTramo(viajes) {
   const tramos = TRAMOS.map(([etiqueta]) => ({ etiqueta, pagado: 0, proceso: 0, espera: 0 }));
   for (const v of viajes) {
+    if (!v.fecha) continue;
     const dia = Number(v.fecha.slice(8, 10));
     const i = TRAMOS.findIndex(([, hasta]) => dia <= hasta);
     tramos[i][grupoEstado(v)] += calcular(v).subtotal;

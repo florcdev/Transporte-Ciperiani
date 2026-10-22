@@ -48,15 +48,15 @@ export function renderDetalle(codigo) {
 
   const valores = {
     'd-fecha': fecha(v.fecha),
-    'd-origen': v.origen,
-    'd-destino': v.destino,
+    'd-origen': v.origen || '—',
+    'd-destino': v.destino || '—',
     'd-cliente': v.cliente?.nombre || state.clientes.find(cliente => Number(cliente.id) === Number(v.clienteId))?.nombre || '—',
     'd-modelo': [v.camion?.marca, v.camion?.modelo].filter(Boolean).join(' ') || '—',
     'd-patente': v.camion?.patente || '—',
-    'd-chofer': v.chofer.nombre,
+    'd-chofer': v.chofer?.nombre || '—',
     'd-ctg': v.ctg || '—',
-    'd-tn': numero(v.toneladas),
-    'q-tarifa': importe(v.tarifa),
+    'd-tn': v.toneladas == null ? '—' : numero(v.toneladas),
+    'q-tarifa': v.tarifa == null ? '—' : importe(v.tarifa),
     'q-com': importe(c.comision),
     'q-sub': importe(c.subtotal),
     'q-driver': importe(c.chofer),
@@ -64,7 +64,7 @@ export function renderDetalle(codigo) {
   };
   Object.entries(valores).forEach(([id, valor]) => { $(id).value = valor; });
 
-  $('q-com-label').textContent = `Comisión del transporte (${numero(v.comisionPct)}%)`;
+  $('q-com-label').textContent = `Comisión del transporte (${v.comisionPct == null ? '—' : numero(v.comisionPct)}%)`;
   $('q-driver-label').textContent = `Parte del chofer (${numero(v.gananciaChoferPct ?? 15)}%)`;
   $('q-trip-total').textContent = dinero(c.totalViaje);
   $('q-total').textContent = dinero(c.saldoChofer);

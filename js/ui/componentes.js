@@ -25,12 +25,12 @@ export function filaViaje(v) {
     <td class="c-estado" data-label="Estado">${chipEstado(v)}</td>
     <td class="c-id" data-label="Viaje"><a class="link-id" href="#viaje/${encodeURIComponent(v.codigo)}">${esc(v.codigo)}</a></td>
     <td class="c-fecha" data-label="Fecha">${fecha(v.fecha)}</td>
-    <td class="c-origen" data-label="Origen" title="${esc(v.origen)}">${esc(localidadBreve(v.origen))}</td>
-    <td class="c-destino" data-label="Destino" title="${esc(v.destino)}">${esc(localidadBreve(v.destino))}</td>
+    <td class="c-origen" data-label="Origen" title="${esc(v.origen)}">${esc(localidadBreve(v.origen) || '—')}</td>
+    <td class="c-destino" data-label="Destino" title="${esc(v.destino)}">${esc(localidadBreve(v.destino) || '—')}</td>
     <td class="c-cliente" data-label="Cliente">${esc(v.cliente?.nombre || '—')}</td>
     <td class="c-ctg" data-label="ctg">${esc(v.ctg) || '—'}</td>
-    <td class="c-tn num" data-label="Toneladas">${numero(v.toneladas)}</td>
-    <td class="c-tarifa num" data-label="Tarifa">${dinero(v.tarifa)}</td>
+    <td class="c-tn num" data-label="Toneladas">${v.toneladas == null ? '—' : numero(v.toneladas)}</td>
+    <td class="c-tarifa num" data-label="Tarifa">${v.tarifa == null ? '—' : dinero(v.tarifa)}</td>
     <td class="c-com num" data-label="Comisión">${dinero(c.comision)}</td>
     <td class="c-ade num" data-label="Adelanto">${dinero(c.adelanto)}</td>
     <td class="c-extra num" data-label="Gastos chofer">${dinero(c.gastosChofer)}</td>

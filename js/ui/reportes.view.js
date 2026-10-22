@@ -243,7 +243,7 @@ function etiquetaMes(ym) {
 }
 
 function aniosDisponibles() {
-  return [...new Set([...state.viajes.map(v => v.fecha.slice(0, 4)), hoyISO().slice(0, 4)])].sort().reverse();
+  return [...new Set([...state.viajes.map(v => v.fecha?.slice(0, 4)).filter(Boolean), hoyISO().slice(0, 4)])].sort().reverse();
 }
 
 function cargarPeriodosGrafico() {
@@ -315,17 +315,20 @@ function crearMovimientosCuenta() {
   const nombreCliente = id => state.clientes.find(cliente => cliente.id === Number(id))?.nombre || 'Cliente';
 
   state.viajes.forEach(viaje => {
+    if (!viaje.fecha) return;
     const codigo = viaje.codigo || String(viaje.id);
     const base = { fecha: viaje.fecha, viaje: codigo };
     const chofer = nombreChofer(viaje.choferId);
     const choferDetalle = modoCuenta === 'general' ? `${chofer} · ` : '';
-    agregar({
-      ...base, tipo: 'chofer', entidadId: Number(viaje.choferId),
-      detalle: `${choferDetalle}Saldo generado · viaje ${codigo}`
-    }, calcular(viaje).chofer, 'debe');
+    if (viaje.choferId) {
+      agregar({
+        ...base, tipo: 'chofer', entidadId: Number(viaje.choferId),
+        detalle: `${choferDetalle}Saldo generado · viaje ${codigo}`
+      }, calcular(viaje).chofer, 'debe');
+    }
 
     (viaje.gastosExtra || []).forEach(gasto => {
-      if (gasto.destino === 'chofer') {
+      if (gasto.destino === 'chofer' && viaje.choferId) {
         agregar({
           ...base, tipo: 'chofer', entidadId: Number(viaje.choferId),
           detalle: `${choferDetalle}${gasto.descripcion} · viaje ${codigo}`
@@ -339,10 +342,12 @@ function crearMovimientosCuenta() {
       }
     });
 
-    agregar({
-      ...base, tipo: 'chofer', entidadId: Number(viaje.choferId),
-      detalle: `${choferDetalle}Adelanto · viaje ${codigo}`
-    }, viaje.adelanto, 'haber');
+    if (viaje.choferId) {
+      agregar({
+        ...base, tipo: 'chofer', entidadId: Number(viaje.choferId),
+        detalle: `${choferDetalle}Adelanto · viaje ${codigo}`
+      }, viaje.adelanto, 'haber');
+    }
   });
 
   state.ordenesRetiro.forEach(ordenRetiro => {
@@ -691,7 +696,7 @@ export function renderGraficoInicio() {
 function filtrarPeriodo(anio, mes) {
   if (anio === 'todos') return state.viajes;
   const periodo = mes === 'todos' ? anio : `${anio}-${mes}`;
-  return state.viajes.filter(v => v.fecha.startsWith(periodo));
+  return state.viajes.filter(v => v.fecha?.startsWith(periodo));
 }
 
 function etiquetaPeriodo(anio, mes) {
@@ -706,7 +711,7 @@ function renderViajesRecientes(viajes) {
     ? recientes.map(v => `<li>
         <a class="recent-trip" href="#viaje/${encodeURIComponent(v.codigo)}">
           <div class="recent-trip-meta">${chipEstado(v)}<time datetime="${esc(v.fecha)}">${fecha(v.fecha)}</time></div>
-          <div class="recent-route"><span>${esc(v.origen)}</span><span class="recent-route-arrow" aria-hidden="true">→</span><span>${esc(v.destino)}</span></div>
+          <div class="recent-route"><span>${esc(v.origen || '—')}</span><span class="recent-route-arrow" aria-hidden="true">→</span><span>${esc(v.destino || '—')}</span></div>
         </a>
       </li>`).join('')
     : '<li class="recent-empty">No hay viajes para los filtros seleccionados.</li>';

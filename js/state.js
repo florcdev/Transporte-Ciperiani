@@ -9,7 +9,7 @@ export const state = {
   ordenesRetiro: [], ordenesPagoCliente: [], resumenesCuenta: []
 };
 
-const masReciente = (a, b) => b.fecha.localeCompare(a.fecha) || b.id - a.id;
+const masReciente = (a, b) => (b.fecha || '').localeCompare(a.fecha || '') || b.id - a.id;
 
 export async function cargarDatos() {
   const [viajes, camiones, choferes, clientes, ordenesRetiro, ordenesPagoCliente, recibosEfectivo] = await Promise.all([
